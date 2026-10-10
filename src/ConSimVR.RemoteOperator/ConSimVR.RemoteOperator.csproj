@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Companion plugin: for machine modes without a cab camera (e.g. the flatbed truck's loading crane), puts the VR
+    viewpoint on the ground beside the machine, as if operating it by remote control.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>ConSimVR.RemoteOperator</AssemblyName>
+    <RootNamespace>ConSimVR.RemoteOperator</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConSimVR\ConSimVR.csproj" Private="false" />
+    <ProjectReference Include="..\ConSimVR.Core\ConSimVR.Core.csproj" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx.Core" HintPath="$(BepInExCore)\BepInEx.Core.dll" Private="false" />
+    <Reference Include="BepInEx.Unity.IL2CPP" HintPath="$(BepInExCore)\BepInEx.Unity.IL2CPP.dll" Private="false" />
+    <Reference Include="Il2CppInterop.Runtime" HintPath="$(BepInExCore)\Il2CppInterop.Runtime.dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InteropReference Include="Il2Cppmscorlib;UnityEngine;UnityEngine.CoreModule;UnityEngine.PhysicsModule;UnityEngine.InputLegacyModule;Cinemachine;Wb.Core;Wb.GameScripts;Wb.Manager" />
+    <Reference Include="@(InteropReference)" HintPath="$(BepInExInterop)\%(Identity).dll" Private="false" />
+  </ItemGroup>
+</Project>

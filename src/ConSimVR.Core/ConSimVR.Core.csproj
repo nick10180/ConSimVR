@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Engine-independent VR core: OpenXR bindings and frame loop, D3D11 COM interop and VR math.
+    No Unity or BepInEx references, so everything here can be unit tested outside the game.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>ConSimVR.Core</AssemblyName>
+    <RootNamespace>ConSimVR.Core</RootNamespace>
+  </PropertyGroup>
+</Project>

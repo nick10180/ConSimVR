@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The BepInEx IL2CPP plugin: OpenXR session, HDRP stereo rendering, camera rig and game patches. -->
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>ConSimVR</AssemblyName>
+    <RootNamespace>ConSimVR</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConSimVR.Core\ConSimVR.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx.Core" HintPath="$(BepInExCore)\BepInEx.Core.dll" Private="false" />
+    <Reference Include="BepInEx.Unity.IL2CPP" HintPath="$(BepInExCore)\BepInEx.Unity.IL2CPP.dll" Private="false" />
+    <Reference Include="BepInEx.Unity.Common" HintPath="$(BepInExCore)\BepInEx.Unity.Common.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(BepInExCore)\0Harmony.dll" Private="false" />
+    <Reference Include="Il2CppInterop.Runtime" HintPath="$(BepInExCore)\Il2CppInterop.Runtime.dll" Private="false" />
+    <Reference Include="Il2CppInterop.Common" HintPath="$(BepInExCore)\Il2CppInterop.Common.dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InteropReference Include="Il2Cppmscorlib;UnityEngine;UnityEngine.CoreModule;UnityEngine.PhysicsModule;UnityEngine.InputLegacyModule;UnityEngine.ScreenCaptureModule;UnityEngine.UIModule;UnityEngine.UI;Unity.RenderPipelines.Core.Runtime;Unity.RenderPipelines.HighDefinition.Runtime;Cinemachine;Wb.Core;Wb.GameScripts;Wb.Manager" />
+    <Reference Include="@(InteropReference)" HintPath="$(BepInExInterop)\%(Identity).dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\vendor\openxr-loader\x64\bin\openxr_loader.dll" Link="openxr_loader.dll" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\vendor\openxr-loader\x64\bin\openxr_loader.dll')" />
+  </ItemGroup>
+</Project>

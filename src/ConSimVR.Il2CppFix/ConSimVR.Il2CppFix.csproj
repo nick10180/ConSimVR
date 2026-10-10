@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    BepInEx preloader patcher. Runs before the IL2CPP chainloader and corrects the native
+    addresses Il2CppInterop hooks, which its heuristics get wrong on this game's protected
+    GameAssembly.dll (every il2cpp_* export is wrapped as `call <stub>; jmp <body>`).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>ConSimVR.Il2CppFix</AssemblyName>
+    <RootNamespace>ConSimVR.Il2CppFix</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx.Core" HintPath="$(BepInExCore)\BepInEx.Core.dll" Private="false" />
+    <Reference Include="BepInEx.Preloader.Core" HintPath="$(BepInExCore)\BepInEx.Preloader.Core.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(BepInExCore)\0Harmony.dll" Private="false" />
+    <Reference Include="Iced" HintPath="$(BepInExCore)\Iced.dll" Private="false" />
+    <Reference Include="Mono.Cecil" HintPath="$(BepInExCore)\Mono.Cecil.dll" Private="false" />
+  </ItemGroup>
+</Project>
