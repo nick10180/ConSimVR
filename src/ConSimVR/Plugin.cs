@@ -16,7 +16,7 @@ namespace ConSimVR
     {
         public const string Guid = "com.consimvr.vr";
         public const string Name = "ConSimVR";
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
 
         internal static new ManualLogSource Log;
         internal static VrLog VrLog;

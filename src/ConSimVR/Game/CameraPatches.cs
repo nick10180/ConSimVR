@@ -9,12 +9,17 @@ namespace ConSimVR
 {
     /// <summary>
     /// Game-side camera behaviour for VR: default to first-person/cab cameras, keep the game camera neutral
-    /// (no mouse look, no head bob, no automatic look-back) so the headset does all the looking.
+    /// (no mouse pitch, no head bob, no automatic look-back) so the headset does the looking. Nothing here applies
+    /// once VR is stopped (F9), so flat play behaves exactly like the unmodded game.
     /// </summary>
     [HarmonyPatch]
     internal static class CameraPatches
     {
-        private static bool Active => VrApi.IsEnabled;
+        /// <summary>VR was started (the session may still be waiting for the headset): steer camera choices.</summary>
+        private static bool VrStarted => VrSession.Instance != null;
+
+        /// <summary>Frames are going to the headset: suppress look input and camera motion the head replaces.</summary>
+        private static bool VrRunning => VrApi.IsVrActive;
 
         /// <summary>
         /// Machines keep a camera set per machine state (Drive, Function1, ...). Swap third-person requests for the cab
@@ -26,7 +31,7 @@ namespace ConSimVR
             new[] { typeof(WbMachineState), typeof(WbCameraType), typeof(bool), typeof(bool) })]
         private static void MachineActivateCamera(WbMachineCameraController __instance, WbMachineState machineState, ref WbCameraType cameraType)
         {
-            if (!Active || !VrConfig.ForceFirstPerson.Value || !GameState.IsThirdPersonGameplay(cameraType))
+            if (!VrStarted || !VrConfig.ForceFirstPerson.Value || !GameState.IsThirdPersonGameplay(cameraType))
                 return;
 
             if (__instance.TryGetCameraForStateAndType(machineState, WbCameraType.MACHINE_INTERIOR, out AWbCameraBehaviour interior) && GameState.IsAlive(interior))
@@ -37,24 +42,33 @@ namespace ConSimVR
         [HarmonyPatch(typeof(WbCharacterCameraController), nameof(WbCharacterCameraController.ActivateCamera), new[] { typeof(WbCameraType) })]
         private static void CharacterActivateCamera(ref WbCameraType cameraType)
         {
-            if (Active && VrConfig.ForceFirstPerson.Value && cameraType == WbCameraType.CHARACTER_THIRD_PERSON)
+            if (VrStarted && VrConfig.ForceFirstPerson.Value && cameraType == WbCameraType.CHARACTER_THIRD_PERSON)
                 cameraType = WbCameraType.CHARACTER_FIRST_PERSON;
         }
 
-        /// <summary>Mouse/stick look input; zeroed in first person so the game camera stays at its neutral rotation.</summary>
+        /// <summary>
+        /// Mouse/stick look input in VR. In a cab both axes are dropped (the head looks around, the cab sets the heading).
+        /// On foot only pitch is dropped: horizontal mouse still turns the character, which is how you change walking
+        /// direction; the VR view follows that heading while the head supplies pitch.
+        /// </summary>
         [HarmonyPostfix]
         [HarmonyPatch(typeof(WbCameraManager), nameof(WbCameraManager.GetCameraInput))]
         private static void GetCameraInput(ref Vector2 __result)
         {
-            if (Active && VrConfig.BlockMouseLook.Value && GameState.IsFirstPerson(GameState.CurrentCameraType))
+            if (!VrRunning || !VrConfig.BlockMouseLook.Value)
+                return;
+            var type = GameState.CurrentCameraType;
+            if (type == WbCameraType.MACHINE_INTERIOR)
                 __result = Vector2.zero;
+            else if (type == WbCameraType.CHARACTER_FIRST_PERSON)
+                __result = new Vector2(__result.x, 0f);
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WbCharacterFirstPersonCameraBehaviour), nameof(WbCharacterFirstPersonCameraBehaviour.UpdateCamera))]
         private static void CharacterFirstPersonUpdate(WbCharacterFirstPersonCameraBehaviour __instance)
         {
-            if (Active && VrConfig.DisableHeadBob.Value && __instance.isNoiseMovementEnabled)
+            if (VrRunning && VrConfig.DisableHeadBob.Value && __instance.isNoiseMovementEnabled)
                 __instance.isNoiseMovementEnabled = false;
         }
 
@@ -63,7 +77,7 @@ namespace ConSimVR
         [HarmonyPatch(typeof(WbMachineFirstPersonCameraBehaviour), nameof(WbMachineFirstPersonCameraBehaviour.UpdateCamera))]
         private static void MachineFirstPersonUpdate(WbMachineFirstPersonCameraBehaviour __instance)
         {
-            if (!Active)
+            if (!VrRunning)
                 return;
             if (__instance.enableLookBack)
                 __instance.enableLookBack = false;

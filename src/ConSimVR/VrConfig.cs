@@ -108,7 +108,7 @@ namespace ConSimVR
                 "Turn off motion blur, depth of field, lens distortion, chromatic aberration and panini projection while in VR.");
             ForceFirstPerson = config.Bind("Camera", "ForceFirstPerson", true,
                 "Replace third-person cameras with the first-person/cab camera whenever the current pawn or machine mode has one.");
-            BlockMouseLook = config.Bind("Camera", "BlockMouseLook", true, "Ignore mouse/stick camera look while in a first-person view (your head does the looking).");
+            BlockMouseLook = config.Bind("Camera", "BlockMouseLook", true, "In VR: ignore mouse/stick look in a cab, and vertical look on foot (horizontal still turns you). Your head does the looking.");
             DisableHeadBob = config.Bind("Camera", "DisableHeadBob", true, "Disable the on-foot first-person camera noise/head bob.");
             FollowVehicleTilt = config.Bind("Camera", "FollowVehicleTilt", true,
                 "In a cab, tilt the view with the machine (realistic). Off keeps the horizon level (more comfortable).");
