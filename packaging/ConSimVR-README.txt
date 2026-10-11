@@ -1,5 +1,5 @@
-ConSimVR 1.0.0 - native OpenXR VR for Construction Simulator
-============================================================
+ConSimVR - native OpenXR VR for Construction Simulator
+======================================================
 
 Requirements
 ------------

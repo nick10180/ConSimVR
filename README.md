@@ -11,7 +11,7 @@ Native stereo VR for **Construction Simulator** (weltenbauer, Unity 2020.3.49f1,
 
 ## Install
 
-**From a release (recommended):** download `ConSimVR-v1.0.0.zip` from [Releases](https://github.com/nick10180/ConSimVR/releases) and extract it into the game folder (Steam > Construction Simulator > Manage > Browse local files), so `BepInEx\`, `dotnet\` and `winhttp.dll` sit next to `ConSim.exe`. If you already run BepInEx 6 IL2CPP be.788, use `ConSimVR-v1.0.0-mod-only.zip` instead.
+**From a release (recommended):** download `ConSimVR-vX.Y.Z.zip` from the [latest release](https://github.com/nick10180/ConSimVR/releases/latest) and extract it into the game folder (Steam > Construction Simulator > Manage > Browse local files), so `BepInEx\`, `dotnet\` and `winhttp.dll` sit next to `ConSim.exe`. If you already run BepInEx 6 IL2CPP be.788, use `ConSimVR-vX.Y.Z-mod-only.zip` instead.
 
 Then start SteamVR (or any active OpenXR runtime with D3D11 support) and the game. The first launch with BepInEx takes a few extra minutes while it generates interop assemblies. VR starts automatically once the game is up (`AutoStart`), or press **F9**. Tested with game build 1.0.0.4349.
 
